@@ -433,6 +433,38 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
 
+    /* 快捷预设按钮组 */
+    .pill-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: var(--param-bg);
+      border: 1px solid var(--param-border);
+      color: var(--text-sub);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .pill-btn:hover {
+      color: var(--text-main);
+      border-color: var(--text-sub);
+    }
+
+    .pill-btn.active {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border-color: var(--btn-primary-bg);
+      box-shadow: 0 2px 8px var(--btn-primary-shadow);
+    }
+
     .toast {
       position: fixed;
       bottom: 24px;
@@ -539,6 +571,21 @@
           </div>
           <input type="range" id="sliderBorderWidth" min="0" max="20" step="0.5" value="7" class="param-slider" />
         </div>
+
+        <div class="param-row">
+          <div class="param-label-group">
+            <span id="paramLabelScale" class="param-title">❌ Logo 整体比例</span>
+            <span id="scaleVal" class="param-value">100%</span>
+          </div>
+          <div class="pill-group" style="margin-bottom: 8px;">
+            <button type="button" class="pill-btn scale-pill" data-scale="0.6">60% 紧凑</button>
+            <button type="button" class="pill-btn scale-pill" data-scale="0.8">80% 偏小</button>
+            <button type="button" class="pill-btn scale-pill active" data-scale="1.0">100% 默认</button>
+            <button type="button" class="pill-btn scale-pill" data-scale="1.2">120% 饱满</button>
+            <button type="button" class="pill-btn scale-pill" data-scale="1.4">140% 满幅</button>
+          </div>
+          <input type="range" id="sliderScale" min="40" max="160" step="1" value="100" class="param-slider" />
+        </div>
       </div>
 
       <!-- 多尺寸效果预览 -->
@@ -621,6 +668,7 @@
     let currentStyle = 'x';            // 'x' | 'divide'
     let currentLineWidth = 14;         // 默认 14
     let currentBorderWidth = 7;        // 默认 7
+    let currentScale = 1.0;            // 默认 1.0 (100%)
 
     const THEME_CONFIG = {
       light: {
@@ -671,8 +719,8 @@
       }
     };
 
-    // 生成 SVG 内容 HTML (纯矢量数学分割，无需遮罩，全透明、无阴影伪影、100% 规整锐利)
-    function getSvgInnerHtml(theme, mode, lineWidth = currentLineWidth, borderWidth = currentBorderWidth) {
+    // 生成 SVG 内容 HTML (纯矢量数学分割，无需遮罩，全透明、无阴影伪影、100% 规整锐利，支持 scale 比例缩放)
+    function getSvgInnerHtml(theme, mode, lineWidth = currentLineWidth, borderWidth = currentBorderWidth, scale = currentScale) {
       const config = THEME_CONFIG[theme];
       const deltaCut = (lineWidth + borderWidth) / Math.SQRT2;
       const x1Cut = (50 - deltaCut).toFixed(3);
@@ -687,12 +735,17 @@
         bgElement = `<rect width="100" height="100" fill="${config.bg}" />`;
       }
 
-      return `
-        ${bgElement}
+      const lines = `
         <line x1="30.3" y1="30.3" x2="${x1Cut}" y2="${y1Cut}" stroke="${config.xMain}" stroke-width="${lineWidth}" stroke-linecap="square" />
         <line x1="${x2Cut}" y1="${y2Cut}" x2="69.7" y2="69.7" stroke="${config.xMain}" stroke-width="${lineWidth}" stroke-linecap="square" />
         <line x1="30.3" y1="69.7" x2="69.7" y2="30.3" stroke="${config.xMain}" stroke-width="${lineWidth}" stroke-linecap="square" />
       `;
+
+      const content = scale !== 1.0 
+        ? `<g transform="translate(50 50) scale(${scale}) translate(-50 -50)">${lines}</g>`
+        : lines;
+
+      return `${bgElement}${content}`;
     }
 
     // 更新界面渲染
@@ -722,24 +775,39 @@
       document.getElementById('themeLight').classList.toggle('active', currentTheme === 'light');
       document.getElementById('themeDark').classList.toggle('active', currentTheme === 'dark');
 
-      // 6. 更新滑块标签图标
+      // 6. 更新滑块标签图标与数值显示
       const styleIcon = currentStyle === 'divide' ? '➗' : '❌';
       document.getElementById('paramLabelLine').textContent = `${styleIcon} 线条粗细`;
       document.getElementById('paramLabelBorder').textContent = `${styleIcon} 边框 / 切割间隙`;
+      document.getElementById('paramLabelScale').textContent = `${styleIcon} Logo 整体比例`;
+
+      document.getElementById('lineWidthVal').textContent = currentLineWidth + 'px';
+      document.getElementById('borderWidthVal').textContent = currentBorderWidth + 'px';
+      document.getElementById('scaleVal').textContent = Math.round(currentScale * 100) + '%';
+
+      document.getElementById('sliderLineWidth').value = currentLineWidth;
+      document.getElementById('sliderBorderWidth').value = currentBorderWidth;
+      document.getElementById('sliderScale').value = Math.round(currentScale * 100);
+
+      // 更新比例预设快捷按钮状态
+      document.querySelectorAll('.scale-pill').forEach(btn => {
+        btn.classList.toggle('active', Math.abs(parseFloat(btn.dataset.scale) - currentScale) < 0.01);
+      });
 
       // 7. 更新副标题描述
       const themeConfig = THEME_CONFIG[currentTheme];
       const styleName = currentStyle === 'divide' ? '除号样式 ➗' : '黑白交叉 ❌';
+      const scaleInfo = currentScale !== 1.0 ? `, 比例: ${Math.round(currentScale * 100)}%` : '';
       if (currentMode === 'transparent') {
-        document.getElementById('themeSubtitle').textContent = `透明背景 · ${styleName} (线宽: ${currentLineWidth}px, 间隙: ${currentBorderWidth}px)`;
+        document.getElementById('themeSubtitle').textContent = `透明背景 · ${styleName} (线宽: ${currentLineWidth}px, 间隙: ${currentBorderWidth}px${scaleInfo})`;
       } else if (currentMode === 'circle') {
-        document.getElementById('themeSubtitle').textContent = `${themeConfig.bg} 无边框底圆 · ${styleName} (线宽: ${currentLineWidth}px, 间隙: ${currentBorderWidth}px)`;
+        document.getElementById('themeSubtitle').textContent = `${themeConfig.bg} 无边框底圆 · ${styleName} (线宽: ${currentLineWidth}px, 间隙: ${currentBorderWidth}px${scaleInfo})`;
       } else {
-        document.getElementById('themeSubtitle').textContent = `${themeConfig.bg} 全部填充底色 · ${styleName} (线宽: ${currentLineWidth}px, 间隙: ${currentBorderWidth}px)`;
+        document.getElementById('themeSubtitle').textContent = `${themeConfig.bg} 全部填充底色 · ${styleName} (线宽: ${currentLineWidth}px, 间隙: ${currentBorderWidth}px${scaleInfo})`;
       }
 
       // 8. 更新主展示 SVG
-      const innerHtml = getSvgInnerHtml(currentTheme, currentMode, currentLineWidth, currentBorderWidth);
+      const innerHtml = getSvgInnerHtml(currentTheme, currentMode, currentLineWidth, currentBorderWidth, currentScale);
       document.getElementById('mainSvg').innerHTML = innerHtml;
 
       // 9. 更新所有多尺寸预览 SVG
@@ -796,43 +864,65 @@
       updateUI();
     });
 
-    // 绑定滑块事件
+    // 绑定滑块与比例事件
     document.getElementById('sliderLineWidth').addEventListener('input', (e) => {
       currentLineWidth = parseFloat(e.target.value);
-      document.getElementById('lineWidthVal').textContent = currentLineWidth + 'px';
       updateUI();
     });
 
     document.getElementById('sliderBorderWidth').addEventListener('input', (e) => {
       currentBorderWidth = parseFloat(e.target.value);
-      document.getElementById('borderWidthVal').textContent = currentBorderWidth + 'px';
       updateUI();
+    });
+
+    document.getElementById('sliderScale').addEventListener('input', (e) => {
+      currentScale = parseFloat(e.target.value) / 100;
+      updateUI();
+    });
+
+    document.querySelectorAll('.scale-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentScale = parseFloat(btn.dataset.scale);
+        updateUI();
+      });
     });
 
     // 重置参数为默认 ❌
     document.getElementById('btnResetParams').addEventListener('click', () => {
       currentLineWidth = STYLE_PRESETS.x.lineWidth;
       currentBorderWidth = STYLE_PRESETS.x.borderWidth;
-      document.getElementById('sliderLineWidth').value = currentLineWidth;
-      document.getElementById('sliderBorderWidth').value = currentBorderWidth;
-      document.getElementById('lineWidthVal').textContent = currentLineWidth + 'px';
-      document.getElementById('borderWidthVal').textContent = currentBorderWidth + 'px';
+      currentScale = 1.0;
       updateUI();
     });
 
-    // 绘制 Logo 到 Canvas (用于 PNG / ICO 导出)
-    function drawLogoCanvas(canvas, size, theme = currentTheme, mode = currentMode, lineWidth = currentLineWidth, borderWidth = currentBorderWidth) {
+    // 绘制 Logo 到 Canvas (用于 PNG / ICO 导出，支持任意宽高及整体缩放比例 scale)
+    function drawLogoCanvas(canvas, width, height = width, theme = currentTheme, mode = currentMode, lineWidth = currentLineWidth, borderWidth = currentBorderWidth, scale = 1.0) {
+      // 兼容 drawLogoCanvas(canvas, size, theme, ...) 调用签名
+      if (typeof height === 'string') {
+        scale = typeof borderWidth === 'number' ? borderWidth : 1.0;
+        borderWidth = typeof lineWidth === 'number' ? lineWidth : currentBorderWidth;
+        lineWidth = typeof mode === 'number' ? mode : currentLineWidth;
+        mode = typeof theme === 'string' ? theme : currentMode;
+        theme = height;
+        height = width;
+      }
+
       const ctx = canvas.getContext('2d');
-      canvas.width = size;
-      canvas.height = size;
+      canvas.width = width;
+      canvas.height = height;
       const config = THEME_CONFIG[theme];
 
       // 透明背景清除
-      ctx.clearRect(0, 0, size, size);
+      ctx.clearRect(0, 0, width, height);
 
-      const margin = size * 0.303;
-      const lw = size * (lineWidth / 100);
-      const mw = size * ((lineWidth + borderWidth * 2) / 100);
+      const cx = width / 2;
+      const cy = height / 2;
+      const baseDim = Math.min(width, height);
+
+      // 缩放后的核心几何参数 (以 baseDim 为基准，scale 控制整体占比)
+      const span = baseDim * 0.197 * scale;
+      const lw = baseDim * (lineWidth / 100) * scale;
+      const mw = baseDim * ((lineWidth + borderWidth * 2) / 100) * scale;
       ctx.lineCap = 'square';
 
       if (mode === 'transparent') {
@@ -841,8 +931,8 @@
         ctx.strokeStyle = config.xMain;
         ctx.lineWidth = lw;
         ctx.beginPath();
-        ctx.moveTo(margin, margin);
-        ctx.lineTo(size - margin, size - margin);
+        ctx.moveTo(cx - span, cy - span);
+        ctx.lineTo(cx + span, cy + span);
         ctx.stroke();
 
         // 2. 擦除中间交错缝隙 (/)
@@ -850,8 +940,8 @@
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = mw;
         ctx.beginPath();
-        ctx.moveTo(margin, size - margin);
-        ctx.lineTo(size - margin, margin);
+        ctx.moveTo(cx - span, cy + span);
+        ctx.lineTo(cx + span, cy - span);
         ctx.stroke();
 
         // 3. 正常模式画上层主体 (/)
@@ -859,85 +949,89 @@
         ctx.strokeStyle = config.xMain;
         ctx.lineWidth = lw;
         ctx.beginPath();
-        ctx.moveTo(margin, size - margin);
-        ctx.lineTo(size - margin, margin);
+        ctx.moveTo(cx - span, cy + span);
+        ctx.lineTo(cx + span, cy - span);
         ctx.stroke();
       } else {
         // 1. 绘制背景 (圆圈 or 全部填充)
         ctx.fillStyle = config.bg;
         if (mode === 'circle') {
           ctx.beginPath();
-          ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+          const radius = baseDim / 2;
+          ctx.arc(cx, cy, radius, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          ctx.fillRect(0, 0, size, size);
+          ctx.fillRect(0, 0, width, height);
         }
 
         // 2. 底层线 (\)
         ctx.strokeStyle = config.xMain;
         ctx.lineWidth = lw;
         ctx.beginPath();
-        ctx.moveTo(margin, margin);
-        ctx.lineTo(size - margin, size - margin);
+        ctx.moveTo(cx - span, cy - span);
+        ctx.lineTo(cx + span, cy + span);
         ctx.stroke();
 
         // 3. 上层遮罩切割线 (/)
         ctx.strokeStyle = config.xMask;
         ctx.lineWidth = mw;
         ctx.beginPath();
-        ctx.moveTo(margin, size - margin);
-        ctx.lineTo(size - margin, margin);
+        ctx.moveTo(cx - span, cy + span);
+        ctx.lineTo(cx + span, cy - span);
         ctx.stroke();
 
         // 4. 上层前景色主体 (/)
         ctx.strokeStyle = config.xMain;
         ctx.lineWidth = lw;
         ctx.beginPath();
-        ctx.moveTo(margin, size - margin);
-        ctx.lineTo(size - margin, margin);
+        ctx.moveTo(cx - span, cy + span);
+        ctx.lineTo(cx + span, cy - span);
         ctx.stroke();
       }
     }
 
-    // 获取导出文件名
-    function getExportFilename(extension) {
+    // 获取导出文件名 (自动添加 @xxpct 标识非 100% 比例)
+    function getExportFilename(extension, width = 1024, height = 1024, scale = currentScale) {
       const stylePrefix = currentStyle === 'divide' ? 'divide' : 'x';
       const modeSuffix = MODE_CONFIG[currentMode].filePrefix;
-      return `${stylePrefix}-${modeSuffix}-${THEME_CONFIG[currentTheme].fileSuffix}.${extension}`;
+      const scaleSuffix = scale !== 1.0 ? `@${Math.round(scale * 100)}pct` : '';
+      return `${stylePrefix}-${modeSuffix}-${THEME_CONFIG[currentTheme].fileSuffix}${scaleSuffix}.${extension}`;
     }
 
-    // 下载 PNG (1024x1024)
+    // 下载 PNG (1024x1024) - 直接按当前选择的比例导出
     document.getElementById('btnPng').addEventListener('click', () => {
       const canvas = document.createElement('canvas');
-      drawLogoCanvas(canvas, 1024, currentTheme, currentMode, currentLineWidth, currentBorderWidth);
+      drawLogoCanvas(canvas, 1024, 1024, currentTheme, currentMode, currentLineWidth, currentBorderWidth, currentScale);
       const png = canvas.toDataURL('image/png');
-      const filename = getExportFilename('png');
+      const filename = getExportFilename('png', 1024, 1024, currentScale);
       const a = document.createElement('a');
       a.href = png;
       a.download = filename;
       a.click();
+      showToast(`PNG 已下载 (比例: ${Math.round(currentScale * 100)}%)`);
     });
 
-    // 下载 SVG
+    // 下载 SVG - 直接按当前选择的比例导出
     document.getElementById('btnSvg').addEventListener('click', () => {
       const svgElement = document.getElementById('mainSvg');
       const svgData = new XMLSerializer().serializeToString(svgElement);
       const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      const filename = getExportFilename('svg');
+      const filename = getExportFilename('svg', 100, 100, currentScale);
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+      showToast(`SVG 已下载 (比例: ${Math.round(currentScale * 100)}%)`);
     });
 
-    // 复制 SVG 代码
+    // 复制 SVG 代码 - 直接包含当前选择的比例
     document.getElementById('btnCopySvg').addEventListener('click', () => {
       const svgElement = document.getElementById('mainSvg');
       const svgData = new XMLSerializer().serializeToString(svgElement);
       navigator.clipboard.writeText(svgData).then(() => {
-        showToast('SVG 代码已复制到剪贴板');
+        showToast(`SVG 代码已复制 (比例: ${Math.round(currentScale * 100)}%)`);
       }).catch(() => {
         showToast('复制失败，请手动复制');
       });
@@ -1012,13 +1106,13 @@
       return buffer;
     }
 
-    // 下载 Favicon (.ico)
+    // 下载 Favicon (.ico) - 直接按当前选择的比例导出
     document.getElementById('btnFavicon').addEventListener('click', () => {
       const canvas = document.createElement('canvas');
       const size = 64;
       canvas.width = size;
       canvas.height = size;
-      drawLogoCanvas(canvas, size, currentTheme, currentMode, currentLineWidth, currentBorderWidth);
+      drawLogoCanvas(canvas, size, size, currentTheme, currentMode, currentLineWidth, currentBorderWidth, currentScale);
 
       const ctx = canvas.getContext('2d');
       const imageData = ctx.getImageData(0, 0, size, size);
@@ -1029,12 +1123,14 @@
 
       const stylePrefix = currentStyle === 'divide' ? 'divide' : 'x';
       const modeSuffix = MODE_CONFIG[currentMode].filePrefix;
-      const filename = `favicon-${stylePrefix}-${modeSuffix}-${THEME_CONFIG[currentTheme].fileSuffix}.ico`;
+      const scaleSuffix = currentScale !== 1.0 ? `@${Math.round(currentScale * 100)}pct` : '';
+      const filename = `favicon-${stylePrefix}-${modeSuffix}-${THEME_CONFIG[currentTheme].fileSuffix}${scaleSuffix}.ico`;
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+      showToast(`Favicon (.ico) 已下载 (比例: ${Math.round(currentScale * 100)}%)`);
     });
 
     // 初始化界面渲染
