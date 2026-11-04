@@ -8,9 +8,9 @@ export default function PrivacyPage() {
   const sections = [
     {
       title: '1. Information Collection',
-      content: 'When you sign in with Google to our service, we collect the following information:',
+      content: 'When you sign in to our service with third-party providers (such as GitHub), we collect the following information:',
       items: [
-        'Your Google account basic information (name, email address, profile picture)',
+        'Your basic account information (name, email address, profile picture)',
         'Login time and IP address',
         'Data generated while using our services'
       ]
@@ -56,11 +56,11 @@ export default function PrivacyPage() {
     },
     {
       title: '7. Third-Party Services',
-      content: 'We use Google OAuth for authentication. When you sign in with Google, your information is also subject to Google\'s privacy policy.',
+      content: 'We use GitHub OAuth for third-party authentication. When you sign in with GitHub, your information is also subject to GitHub\'s privacy policy.',
       items: [],
       link: {
-        text: 'Google Privacy Policy',
-        url: 'https://policies.google.com/privacy'
+        text: 'GitHub Privacy Statement',
+        url: 'https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement'
       }
     },
     {

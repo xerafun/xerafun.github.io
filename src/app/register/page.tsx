@@ -122,7 +122,7 @@ export default function RegisterPage() {
                 {error}
                 {error.includes('该邮箱已被注册') && (
                   <div className="mt-2 text-foreground">
-                    建议直接 <Link href="/login" className="text-primary hover:underline font-medium">登录</Link> 并选择 Google 或 GitHub 方式
+                    建议直接 <Link href="/login" className="text-primary hover:underline font-medium">登录</Link> 并选择 GitHub 方式
                   </div>
                 )}
               </div>
