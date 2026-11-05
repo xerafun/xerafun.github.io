@@ -16,7 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: '/tools/gemini', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/tools/info-create', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/tools/life-calendar', priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: '/tools/asset-allocation', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/tools/aes-decrypt', priority: 0.7, changeFrequency: 'monthly' as const },
 
     // 生成工具页面

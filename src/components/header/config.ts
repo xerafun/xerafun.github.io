@@ -34,10 +34,6 @@ export const links: Link[] = [
     href: '/clocks',
   },
   {
-    title: 'Finance',
-    href: '/finance',
-  },
-  {
     title: 'Games',
     href: '/games',
   },

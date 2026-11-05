@@ -5,7 +5,6 @@ import { Shield } from 'lucide-react'
 const adminLinks = [
   { href: '/admin/users', title: '用户列表', description: '查看所有用户及其基础信息' },
   { href: '/admin/life-calendar', title: '生命日历设置', description: '查看所有用户的生命日历配置' },
-  { href: '/admin/asset-allocation', title: '资产配置记录', description: '查看所有用户的资产配置记录' },
 ]
 
 export default async function AdminHomePage() {
@@ -34,7 +33,7 @@ export default async function AdminHomePage() {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {adminLinks.map((link) => (
             <a
               key={link.href}

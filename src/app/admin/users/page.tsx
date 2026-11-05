@@ -18,7 +18,6 @@ export default async function AdminUsersPage() {
     orderBy: { createdAt: 'desc' },
     include: {
       lifeCalendarSettings: true,
-      assetAllocations: true,
       accounts: true,
       sessions: true,
     },

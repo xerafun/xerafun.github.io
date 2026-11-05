@@ -19,7 +19,6 @@ model User {
   accounts               Account[]
   sessions               Session[]
   lifeCalendarSettings  LifeCalendarSettings?
-  assetAllocations       AssetAllocation[]
 }
 
 // NextAuth.js 所需的模型
@@ -68,16 +67,4 @@ model LifeCalendarSettings {
   createdAt  DateTime @default(now()) @db.Timestamp(6)
   updatedAt  DateTime @updatedAt @db.Timestamp(6)
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model AssetAllocation {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    String   @db.Uuid
-  name      String   @db.VarChar(100)
-  amount    Float
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt @db.Timestamp(6)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
