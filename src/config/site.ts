@@ -58,9 +58,6 @@ export const siteMetadata: Metadata = {
     creator: '@xerafun',
     images: ['/favicon.ico'],
   },
-  verification: {
-    google: '7fda4c6923f8758a',
-  },
   alternates: {
     canonical: BASE_URL,
   },
