@@ -7,15 +7,13 @@ import Nav from "./nav";
 import { cn } from "@/lib/utils";
 import Breadcrumb from "./breadcrumb";
 import { useApp } from "@/contexts/AppContext";
-import { ReactNode } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 interface HeaderProps {
   loader?: boolean;
-  userAuth?: ReactNode;
 }
 
-const Header = ({ loader, userAuth }: HeaderProps) => {
+const Header = ({ loader }: HeaderProps) => {
   const { isMenuActive: isActive, setIsMenuActive: setIsActive } = useApp();
 
   return (
@@ -42,10 +40,6 @@ const Header = ({ loader, userAuth }: HeaderProps) => {
         <Breadcrumb />
 
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-          <div className="hidden sm:block">
-            {userAuth}
-          </div>
-
           <div onClick={(e) => e.stopPropagation()} className="hidden sm:flex items-center justify-center cursor-can-hover">
             <ThemeToggle />
           </div>
@@ -78,7 +72,7 @@ const Header = ({ loader, userAuth }: HeaderProps) => {
       ></motion.div>
 
       <AnimatePresence mode="wait">
-        {isActive && <Nav setIsActive={setIsActive} userAuth={userAuth} />}
+        {isActive && <Nav setIsActive={setIsActive} />}
       </AnimatePresence>
     </motion.header>
   );

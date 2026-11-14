@@ -4,7 +4,6 @@ export interface Link {
   target?: string;
   id?: string;       // 对应的 section id（用于首页锚点）
   offset?: number;   // 滚动触发位置（0-1 之间的百分比）
-  adminOnly?: boolean; // 仅管理员可见的导航项
 }
 
 /**
@@ -17,7 +16,7 @@ export const links: Link[] = [
     id: 'hero',
     offset: 0.3,
   },
-    {
+  {
     title: 'Github',
     href: '/github',
   },
@@ -37,11 +36,6 @@ export const links: Link[] = [
     title: 'Games',
     href: '/games',
   },
-  {
-    title: 'Admin',
-    href: '/admin',
-    adminOnly: true,
-  },
 ];
 
 /**
@@ -51,4 +45,3 @@ export const getHomeSections = () =>
   links
     .filter(link => link.id)
     .map(({ id, offset }) => ({ id: id!, offset: offset || 0.3 }));
-

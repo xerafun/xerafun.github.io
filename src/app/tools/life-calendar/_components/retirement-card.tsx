@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { differenceInDays } from "date-fns";
 import { Input } from "@/components/ui/input";
@@ -16,39 +15,42 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
-export default function RetirementCard() {
-  const { data: session, status } = useSession();
-  const isAuthenticated = status === "authenticated";
+const STORAGE_KEY = "life-calendar-settings";
 
+export default function RetirementCard() {
   const [birthYear, setBirthYear] = useState<string>("1995");
   const [gender, setGender] = useState<string>("male");
   const [retirementAge, setRetirementAge] = useState<string>("65");
   const [retirementDate, setRetirementDate] = useState<Date | null>(null);
   const [daysLeft, setDaysLeft] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [hasLoaded, setHasLoaded] = useState(false);
 
-  // Load settings from API for logged-in users
+  // Load settings from localStorage
   useEffect(() => {
-    if (isAuthenticated && !hasLoaded) {
-      setIsLoading(true);
-      fetch("/api/life-calendar")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.settings) {
-            const { currentAge, targetAge } = data.settings;
-            const currentYear = new Date().getFullYear();
-            setBirthYear(String(currentYear - Math.floor(currentAge)));
-            setRetirementAge(String(Math.floor(targetAge)));
-          }
-          setHasLoaded(true);
-        })
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.birthYear) setBirthYear(String(parsed.birthYear));
+        if (parsed.gender) setGender(parsed.gender);
+        if (parsed.retirementAge) setRetirementAge(String(parsed.retirementAge));
+      }
+    } catch {
+      // Ignore parse errors
     }
-  }, [isAuthenticated, hasLoaded]);
+  }, []);
+
+  // Save settings to localStorage on change
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ birthYear, gender, retirementAge })
+      );
+    } catch {
+      // Ignore storage errors
+    }
+  }, [birthYear, gender, retirementAge]);
 
   // Calculate retirement countdown
   useEffect(() => {
@@ -71,50 +73,6 @@ export default function RetirementCard() {
     }
   }, [birthYear, gender, retirementAge]);
 
-  // Debounced save function
-  const saveSettings = useCallback(
-    async (year: string, age: string) => {
-      if (!isAuthenticated) return;
-
-      const birthYearNum = parseInt(year);
-      const retirementAgeNum = parseInt(age);
-      if (isNaN(birthYearNum) || isNaN(retirementAgeNum)) return;
-
-      const currentYear = new Date().getFullYear();
-      const currentAge = currentYear - birthYearNum;
-
-      if (currentAge <= 0 || retirementAgeNum <= currentAge) return;
-
-      setIsSaving(true);
-      try {
-        await fetch("/api/life-calendar", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentAge,
-            targetAge: retirementAgeNum,
-          }),
-        });
-      } catch (error) {
-        console.error("保存设置失败:", error);
-      } finally {
-        setIsSaving(false);
-      }
-    },
-    [isAuthenticated]
-  );
-
-  // Auto-save when values change (debounced)
-  useEffect(() => {
-    if (!isAuthenticated || !hasLoaded) return;
-
-    const timer = setTimeout(() => {
-      saveSettings(birthYear, retirementAge);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [birthYear, retirementAge, isAuthenticated, hasLoaded, saveSettings]);
-
   return (
     <Card className={cn(
       "flex flex-col p-6 text-card-foreground border-border shadow-md h-full min-h-75",
@@ -125,11 +83,6 @@ export default function RetirementCard() {
           <h3 className="text-2xl font-bold">退休倒计时</h3>
           <p className="text-muted-foreground text-sm">
             距离退休还有
-            {isAuthenticated && (
-              <span className="ml-2 text-xs text-primary">
-                {isLoading ? "加载中..." : isSaving ? "保存中..." : "已同步"}
-              </span>
-            )}
           </p>
         </div>
         <div className="text-right">
@@ -154,12 +107,11 @@ export default function RetirementCard() {
             value={birthYear}
             onChange={(e) => setBirthYear(e.target.value)}
             className="h-8"
-            disabled={isLoading}
           />
         </div>
         <div className="space-y-1">
           <Label htmlFor="gender" className="text-xs text-muted-foreground">性别</Label>
-          <Select value={gender} onValueChange={setGender} disabled={isLoading}>
+          <Select value={gender} onValueChange={setGender}>
             <SelectTrigger className="h-8">
               <SelectValue />
             </SelectTrigger>
@@ -177,7 +129,6 @@ export default function RetirementCard() {
             value={retirementAge}
             onChange={(e) => setRetirementAge(e.target.value)}
             className="h-8"
-            disabled={isLoading}
           />
         </div>
       </div>

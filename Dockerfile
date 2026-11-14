@@ -7,8 +7,6 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-# Copy prisma schema before installing dependencies
-COPY prisma ./prisma/
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \

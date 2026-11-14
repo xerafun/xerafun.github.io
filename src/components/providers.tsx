@@ -2,7 +2,6 @@
 
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
-import SessionProvider from "@/components/session-provider";
 import { AppProvider } from "@/contexts/AppContext";
 import dynamic from "next/dynamic";
 
@@ -22,15 +21,13 @@ export function Providers({ children }: ProvidersProps) {
       enableSystem={false}
       disableTransitionOnChange
     >
-      <SessionProvider>
-        <AppProvider>
-          <SmoothScroll>
-            <Background />
-            {children}
-            <ElasticCursor />
-          </SmoothScroll>
-        </AppProvider>
-      </SessionProvider>
+      <AppProvider>
+        <SmoothScroll>
+          <Background />
+          {children}
+          <ElasticCursor />
+        </SmoothScroll>
+      </AppProvider>
     </ThemeProvider>
   );
 }

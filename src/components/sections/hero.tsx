@@ -19,9 +19,7 @@ export default function HeroSection() {
   const svgFile = currentTheme === 'light'
     ? 'snake-light.svg'
     : 'snake-dark.svg';
-  const snakeSvgSrc = `/api/redirect?url=${encodeURIComponent(
-    `https://cdn.jsdelivr.net/gh/xerafun/x-actions-profile@output/${svgFile}`
-  )}`;
+  const snakeSvgSrc = `https://cdn.jsdelivr.net/gh/xerafun/x-actions-profile@output/${svgFile}`;
 
   return (
     <section

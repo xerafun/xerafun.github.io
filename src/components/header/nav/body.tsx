@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, ReactNode } from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import styles from "./body.module.scss";
@@ -20,7 +20,6 @@ interface BodyProps {
   selectedLink: SelectedLink;
   setSelectedLink: (selectedLink: SelectedLink) => void;
   setIsActive: (isActive: boolean) => void;
-  userAuth?: ReactNode;
 }
 
 export default function Body({
@@ -28,7 +27,6 @@ export default function Body({
   selectedLink,
   setSelectedLink,
   setIsActive,
-  userAuth,
 }: BodyProps) {
   const pathname = usePathname();
 
@@ -73,11 +71,6 @@ export default function Body({
         <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-center">
           <ThemeToggle />
         </div>
-        {userAuth && (
-          <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-center">
-            {userAuth}
-          </div>
-        )}
       </motion.div>
       {links.map((link, index) => {
         const { title, href, target } = link;
