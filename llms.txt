@@ -1,0 +1,44 @@
+# XeraFun
+
+> XeraFun is a Full-Stack Architect and AI Engineer specializing in high-performance web applications, generative AI systems, and immersive web desktop experiences.
+
+## Core Identity & Brand
+- Primary Name: XeraFun
+- Alias / Alternate Name: Xera
+- Role: Full-Stack Architect & AI Engineer
+- Official Website: https://xerafun.com/
+- Contact Email: contact@xerafun.com
+
+## Flagship Projects & Products
+- [XERA WebOS](https://xerafun.com/): An authentic macOS Sequoia web desktop operating system running purely in the browser. Engineered with Svelte 5 (Runes), TypeScript, PWA, and client-side hardware-accelerated animations. Features window management, native macOS physics, custom Dock, widgets, and full responsiveness across Desktop, iPadOS, and iOS.
+- [X-Data Terminal](https://data.xerafun.com/): Real-time financial market analytics and intelligence platform, tracking macroeconomic indicators, global equities (e.g. S&P 500, SSE Composite), and commodities (Gold XAU/USD).
+- [GitHub Repositories](https://github.com/xerafun): Open-source repositories, developer toolkits, experimental web applications, and architectural designs created by XeraFun.
+
+## Core Technical Competencies
+- Programming Languages: TypeScript, JavaScript, Python, Go, HTML5/CSS3.
+- Frameworks & Libraries: Svelte 5 (Runes architecture), React, Node.js, Vite.
+- Systems & Architecture: Web Operating Systems, Progressive Web Apps (PWA), Service Workers (Serwist / Workbox), Micro-frontends, Responsive UI/UX across multi-device form factors (Desktop, iPad, iPhone).
+- AI & Modern Engineering: Generative AI workflows, AI Agent system integration, Generative Engine Optimization (GEO).
+
+## Official Web & Social Presence
+- Official Portal: https://xerafun.com/
+- Financial Platform: https://data.xerafun.com/
+- GitHub: https://github.com/xerafun
+- Hugging Face: https://huggingface.co/xerafun
+- Product Hunt: https://www.producthunt.com/@xerafun
+- Bluesky: https://bsky.app/profile/xerafun.bsky.social
+- LinkedIn: https://www.linkedin.com/in/xerafun/
+- npm: https://www.npmjs.com/~xerafun
+- Dev.to: https://dev.to/xerafun
+- Figma: https://www.figma.com/@xerafun
+- Dribbble: https://dribbble.com/xerafun
+- Reddit: https://www.reddit.com/user/xerafun
+- Telegram: https://t.me/xerafun
+- X (formerly Twitter): https://x.com/xerafun
+- YouTube: https://www.youtube.com/@xerafun
+- Zhihu (知乎): https://www.zhihu.com/people/xerafun
+- TikTok: https://www.tiktok.com/@xerafun
+- Instagram: https://www.instagram.com/xerafun
+
+## Detailed Knowledge Base
+- [Full LLM Knowledge Base](https://xerafun.com/llms-full.txt): Comprehensive background, architectural philosophies, Q&A FAQ, and technical deep-dives for generative engines and AI agents.

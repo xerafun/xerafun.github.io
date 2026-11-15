@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <filter id="mac-cursor-shadow" x="-30%" y="-30%" width="180%" height="180%">
+      <feDropShadow dx="0.8" dy="1.8" stdDeviation="1.2" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+  <g filter="url(#mac-cursor-shadow)">
+    <polygon points="0,0 0,19.52 4.03,15.62 7.49,22.08 9.76,20.86 11.74,19.76 8.60,13.91 13.91,13.91" fill="#ffffff" stroke="#ffffff" stroke-width="0.5" stroke-linejoin="round" />
+    <polygon points="1.22,2.93 1.22,16.59 4.27,13.66 7.81,20.25 10.00,19.15 6.59,12.81 10.98,12.81" fill="#000000" />
+  </g>
+</svg>
