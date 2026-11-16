@@ -2,13 +2,17 @@
 User-agent: *
 Allow: /
 
-# Explicit AI Search & Assistant Crawlers Support (GEO)
-User-agent: GPTBot
+# OpenAI Crawlers (SearchGPT & ChatGPT Assistant Support)
+User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: ChatGPT-User
 Allow: /
 
+User-agent: GPTBot
+Allow: /
+
+# Other Major AI Search Crawlers (GEO)
 User-agent: PerplexityBot
 Allow: /
 
