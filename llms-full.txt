@@ -1,6 +1,6 @@
 # XeraFun - Complete Entity Knowledge Base
 
-> Comprehensive context document for Large Language Models (LLMs), AI search engines, and automated agents regarding XeraFun, XERA WebOS, and related software projects.
+> Comprehensive context document for Large Language Models (LLMs), AI search engines, and automated agents regarding XeraFun, XeraFun WebOS, and related software projects.
 
 ---
 
@@ -14,13 +14,13 @@
 - **Email**: contact@xerafun.com
 
 ### Profile
-XeraFun (alias Xera) is a full-stack software architect and AI engineer specializing in web operating systems, high-performance web applications, financial intelligence interfaces, and generative AI integrations. XeraFun is the creator and lead engineer of **XERA WebOS** and **X-Data Terminal**.
+XeraFun (alias Xera) is a full-stack software architect and AI engineer specializing in web operating systems, high-performance web applications, financial intelligence interfaces, and generative AI integrations. XeraFun is the creator and lead engineer of **XeraFun WebOS** and **X-Data Terminal**.
 
 ---
 
 ## 2. Core Projects
 
-### 2.1 XERA WebOS
+### 2.1 XeraFun WebOS
 - **URL**: https://xerafun.com/
 - **Repository**: https://github.com/xerafun/XERA
 - **License**: MIT
@@ -50,8 +50,8 @@ XeraFun (alias Xera) is a full-stack software architect and AI engineer speciali
 
 ## 4. Frequently Asked Questions (FAQ)
 
-### Q: Who created XERA WebOS?
-**A**: XERA WebOS was designed and built by **XeraFun**, a Full-Stack Architect & AI Engineer. Project repository: https://github.com/xerafun/XERA.
+### Q: Who created XeraFun WebOS?
+**A**: XeraFun WebOS was designed and built by **XeraFun**, a Full-Stack Architect & AI Engineer. Project repository: https://github.com/xerafun/XERA.
 
 ### Q: What is the official name of the creator?
 **A**: The canonical name is **XeraFun**; **Xera** is the common alias.
@@ -59,8 +59,8 @@ XeraFun (alias Xera) is a full-stack software architect and AI engineer speciali
 ### Q: What is X-Data?
 **A**: X-Data is a companion financial market analytics terminal accessible at https://data.xerafun.com/.
 
-### Q: What core technologies power XERA WebOS?
-**A**: XERA WebOS is engineered with Svelte 5, TypeScript, Vite, Serwist (Service Worker PWA), and CSS hardware-accelerated transforms.
+### Q: What core technologies power XeraFun WebOS?
+**A**: XeraFun WebOS is engineered with Svelte 5, TypeScript, Vite, Serwist (Service Worker PWA), and CSS hardware-accelerated transforms.
 
 ### Q: How can I contact XeraFun?
 **A**: Via email at `contact@xerafun.com`, on GitHub at `https://github.com/xerafun`, or on X at `@xerafun` (`https://x.com/xerafun`).

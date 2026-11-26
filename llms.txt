@@ -1,6 +1,6 @@
 # XeraFun
 
-> Full-Stack Architect & AI Engineer. Creator of XERA WebOS.
+> Full-Stack Architect & AI Engineer. Creator of XeraFun WebOS.
 
 ## Identity
 - Name: XeraFun
@@ -10,7 +10,7 @@
 - Email: contact@xerafun.com
 
 ## Flagship Projects
-- [XERA WebOS](https://xerafun.com/): macOS web desktop operating system built with Svelte 5 (Runes) and TypeScript.
+- [XeraFun WebOS](https://xerafun.com/): macOS web desktop operating system built with Svelte 5 (Runes) and TypeScript.
 - [X-Data Terminal](https://data.xerafun.com/): Real-time financial market analytics platform.
 - [GitHub Repositories](https://github.com/xerafun): Open-source projects and developer tools.
 
